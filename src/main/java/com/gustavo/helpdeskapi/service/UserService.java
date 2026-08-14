@@ -1,5 +1,6 @@
 package com.gustavo.helpdeskapi.service;
 
+import com.gustavo.helpdeskapi.dto.UserDTO;
 import com.gustavo.helpdeskapi.entity.User;
 import com.gustavo.helpdeskapi.exception.ResourceNotFoundException;
 import com.gustavo.helpdeskapi.repository.UserRepository;
@@ -25,9 +26,19 @@ public class UserService {
         return userRepository.findAll();
     }
 
-    public User getUserById(Long id){
-        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
+    public UserDTO getUserById(Long id){
+
+        User user = userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Usuário não encontrado!"));
+
+        return new UserDTO(
+          user.getId(),
+          user.getName(),
+          user.getEmail(),
+          user.getRole()
+        );
+
     }
+
 
     public void deleteUser(Long id){
         User user = userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Usuário não encontrado!"));

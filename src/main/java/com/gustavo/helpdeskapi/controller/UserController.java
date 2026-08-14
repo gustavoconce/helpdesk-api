@@ -1,5 +1,6 @@
 package com.gustavo.helpdeskapi.controller;
 
+import com.gustavo.helpdeskapi.dto.UserDTO;
 import com.gustavo.helpdeskapi.entity.User;
 import com.gustavo.helpdeskapi.service.UserService;
 import jakarta.validation.Valid;
@@ -30,7 +31,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public User getUserById(@PathVariable Long id) {
+    public UserDTO getUserById(@PathVariable Long id) {
         return userService.getUserById(id);
     }
 
