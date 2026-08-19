@@ -1,5 +1,6 @@
 package com.gustavo.helpdeskapi.controller;
 
+import com.gustavo.helpdeskapi.dto.CategoryDTO;
 import com.gustavo.helpdeskapi.entity.Category;
 import com.gustavo.helpdeskapi.service.CategoryService;
 import jakarta.validation.Valid;
@@ -25,7 +26,7 @@ public class CategoryController {
     }
 
     @GetMapping
-    public List<Category> getAllCategories(){
+    public List<CategoryDTO> getAllCategories(){
         return categoryService.getAllCategories();
     }
 }

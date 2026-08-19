@@ -1,5 +1,6 @@
 package com.gustavo.helpdeskapi.controller;
 
+import com.gustavo.helpdeskapi.dto.TicketDTO;
 import com.gustavo.helpdeskapi.entity.Ticket;
 import com.gustavo.helpdeskapi.service.TicketService;
 import jakarta.persistence.PostUpdate;
@@ -26,12 +27,12 @@ public class TicketController {
     }
 
     @GetMapping
-    public List<Ticket> getAllTickets(){
+    public List<TicketDTO> getAllTickets(){
         return ticketService.getAllTickets();
     }
 
     @GetMapping("/{id}")
-    public Ticket getTicketById(@PathVariable Long id){
+    public TicketDTO getTicketById(@PathVariable Long id){
         return ticketService.getTicketById(id);
     }
 

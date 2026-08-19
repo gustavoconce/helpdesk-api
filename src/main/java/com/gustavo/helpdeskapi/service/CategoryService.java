@@ -1,7 +1,9 @@
 package com.gustavo.helpdeskapi.service;
 
+import com.gustavo.helpdeskapi.dto.CategoryDTO;
 import com.gustavo.helpdeskapi.entity.Category;
 import com.gustavo.helpdeskapi.entity.User;
+import com.gustavo.helpdeskapi.mapper.CategoryMapper;
 import com.gustavo.helpdeskapi.repository.CategoryRepository;
 import org.springframework.stereotype.Service;
 
@@ -20,7 +22,11 @@ public class CategoryService {
         return categoryRepository.save(category);
     }
 
-    public List<Category> getAllCategories() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> getAllCategories() {
+
+        List<Category> categories = categoryRepository.findAll();
+
+        return categories.stream().map(CategoryMapper::toDTO).toList();
+
     }
 }

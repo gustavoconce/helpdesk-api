@@ -1,7 +1,9 @@
 package com.gustavo.helpdeskapi.service;
 
+import com.gustavo.helpdeskapi.dto.TicketDTO;
 import com.gustavo.helpdeskapi.entity.Category;
 import com.gustavo.helpdeskapi.entity.User;
+import com.gustavo.helpdeskapi.mapper.TicketMapper;
 import com.gustavo.helpdeskapi.repository.UserRepository;
 import com.gustavo.helpdeskapi.repository.CategoryRepository;
 
@@ -41,12 +43,19 @@ public class TicketService {
         return ticketRepository.save(ticket);
     }
 
-    public List<Ticket> getAllTickets() {
-        return ticketRepository.findAll();
+    public List<TicketDTO> getAllTickets() {
+
+        List<Ticket> tickets = ticketRepository.findAll();
+
+        return tickets.stream().map(TicketMapper::toDTO).toList();
+
     }
 
-    public Ticket getTicketById(Long id){
-        return ticketRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ticket não Encontrado!") );
+    public TicketDTO getTicketById(Long id){
+
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ticket não Encontrado!") );
+
+        return TicketMapper.toDTO(ticket);
     }
 
     public Ticket updateTicket(Long id, Ticket ticketData) {
