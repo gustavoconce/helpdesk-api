@@ -1,5 +1,6 @@
 package com.gustavo.helpdeskapi.controller;
 
+import com.gustavo.helpdeskapi.dto.UserCreateDTO;
 import com.gustavo.helpdeskapi.dto.UserDTO;
 import com.gustavo.helpdeskapi.entity.User;
 import com.gustavo.helpdeskapi.service.UserService;
@@ -21,8 +22,10 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@Valid @RequestBody User user) {
-        return userService.createUser(user);
+    public UserDTO createUser(@Valid @RequestBody UserCreateDTO dto) {
+
+        return userService.createUser(dto);
+
     }
 
     @GetMapping

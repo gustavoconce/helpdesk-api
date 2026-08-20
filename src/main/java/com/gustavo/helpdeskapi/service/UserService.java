@@ -1,5 +1,6 @@
 package com.gustavo.helpdeskapi.service;
 
+import com.gustavo.helpdeskapi.dto.UserCreateDTO;
 import com.gustavo.helpdeskapi.dto.UserDTO;
 import com.gustavo.helpdeskapi.entity.User;
 import com.gustavo.helpdeskapi.exception.ResourceNotFoundException;
@@ -21,8 +22,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDTO createUser(UserCreateDTO dto) {
+
+        User user = UserMapper.toEntity(dto);
+
+        User savedUser = userRepository.save(user);
+
+        return UserMapper.toDTO(savedUser);
+
     }
 
     public List<UserDTO> getAllUsers() {

@@ -1,5 +1,6 @@
 package com.gustavo.helpdeskapi.service;
 
+import com.gustavo.helpdeskapi.dto.CategoryCreateDTO;
 import com.gustavo.helpdeskapi.dto.CategoryDTO;
 import com.gustavo.helpdeskapi.entity.Category;
 import com.gustavo.helpdeskapi.entity.User;
@@ -18,8 +19,13 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Category createCategory(Category category) {
-        return categoryRepository.save(category);
+    public CategoryDTO createCategory(CategoryCreateDTO dto) {
+
+        Category category = CategoryMapper.toEntity(dto);
+
+        Category savedCategory = categoryRepository.save(category);
+
+        return CategoryMapper.toDTO(savedCategory);
     }
 
     public List<CategoryDTO> getAllCategories() {

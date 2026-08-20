@@ -1,5 +1,6 @@
 package com.gustavo.helpdeskapi.controller;
 
+import com.gustavo.helpdeskapi.dto.TicketCreateDTO;
 import com.gustavo.helpdeskapi.dto.TicketDTO;
 import com.gustavo.helpdeskapi.entity.Ticket;
 import com.gustavo.helpdeskapi.service.TicketService;
@@ -22,8 +23,8 @@ public class TicketController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Ticket createTicket(@Valid @RequestBody Ticket ticket){
-        return ticketService.createTicket(ticket);
+    public TicketDTO createTicket(@Valid @RequestBody TicketCreateDTO dto) {
+        return ticketService.createTicket(dto);
     }
 
     @GetMapping
