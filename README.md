@@ -250,5 +250,4 @@ A proposta é construir a aplicação de forma incremental, documentando cada ve
 ## 👨‍💻 Desenvolvedor
 
 **Gustavo Santos Conceição**
-
 Projeto desenvolvido para estudos, prática de desenvolvimento backend e construção de portfólio.
