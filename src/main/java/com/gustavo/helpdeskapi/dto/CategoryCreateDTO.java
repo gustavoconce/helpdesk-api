@@ -1,7 +1,10 @@
 package com.gustavo.helpdeskapi.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public class CategoryCreateDTO {
 
+    @NotBlank(message = "Nome da categoria é obrigatório")
     private String name;
 
     public CategoryCreateDTO() {

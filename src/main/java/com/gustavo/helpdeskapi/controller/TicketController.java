@@ -9,6 +9,9 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 
 @RestController
@@ -28,8 +31,8 @@ public class TicketController {
     }
 
     @GetMapping
-    public List<TicketDTO> getAllTickets(){
-        return ticketService.getAllTickets();
+    public Page<TicketDTO> getAllTickets(Pageable pageable) {
+        return ticketService.getAllTickets(pageable);
     }
 
     @GetMapping("/{id}")

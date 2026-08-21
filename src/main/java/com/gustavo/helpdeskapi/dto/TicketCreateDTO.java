@@ -2,14 +2,27 @@ package com.gustavo.helpdeskapi.dto;
 
 import com.gustavo.helpdeskapi.entity.TicketPriority;
 import com.gustavo.helpdeskapi.entity.TicketStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 public class TicketCreateDTO {
 
+    @NotBlank(message = "Título é obrigatório")
     private String title;
+
+    @NotBlank(message = "Descrição é obrigatória")
     private String description;
+
+    @NotNull(message = "Status é obrigatório")
     private TicketStatus status;
+
+    @NotNull(message = "Prioridade é obrigatória")
     private TicketPriority priority;
+
+    @NotNull(message = "Usuário é obrigatório")
     private Long userId;
+
+    @NotNull(message = "Categoria é obrigatória")
     private Long categoryId;
 
     public TicketCreateDTO() {
