@@ -1,12 +1,17 @@
 package com.gustavo.helpdeskapi.service;
 
+import com.gustavo.helpdeskapi.dto.UserCreateDTO;
+import com.gustavo.helpdeskapi.dto.UserDTO;
 import com.gustavo.helpdeskapi.entity.User;
 import com.gustavo.helpdeskapi.exception.ResourceNotFoundException;
+import com.gustavo.helpdeskapi.mapper.UserMapper;
 import com.gustavo.helpdeskapi.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class UserService {
@@ -17,17 +22,32 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(User user) {
-        return userRepository.save(user);
+    public UserDTO createUser(UserCreateDTO dto) {
+
+        User user = UserMapper.toEntity(dto);
+
+        User savedUser = userRepository.save(user);
+
+        return UserMapper.toDTO(savedUser);
+
     }
 
-    public List<User> getAllUsers() {
-        return userRepository.findAll();
+    public List<UserDTO> getAllUsers() {
+
+        List<User> users = userRepository.findAll();
+
+        return users.stream().map(UserMapper::toDTO).toList();
+
     }
 
-    public User getUserById(Long id){
-        return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado!"));
+    public UserDTO getUserById(Long id){
+
+        User user = userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Usuário não encontrado!"));
+
+        return UserMapper.toDTO(user);
+
     }
+
 
     public void deleteUser(Long id){
         User user = userRepository.findById(id).orElseThrow( () -> new ResourceNotFoundException("Usuário não encontrado!"));

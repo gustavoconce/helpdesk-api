@@ -1,7 +1,10 @@
 package com.gustavo.helpdeskapi.service;
 
+import com.gustavo.helpdeskapi.dto.TicketCreateDTO;
+import com.gustavo.helpdeskapi.dto.TicketDTO;
 import com.gustavo.helpdeskapi.entity.Category;
 import com.gustavo.helpdeskapi.entity.User;
+import com.gustavo.helpdeskapi.mapper.TicketMapper;
 import com.gustavo.helpdeskapi.repository.UserRepository;
 import com.gustavo.helpdeskapi.repository.CategoryRepository;
 
@@ -9,6 +12,9 @@ import com.gustavo.helpdeskapi.entity.Ticket;
 import com.gustavo.helpdeskapi.exception.ResourceNotFoundException;
 import com.gustavo.helpdeskapi.repository.TicketRepository;
 import org.springframework.stereotype.Service;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -25,28 +31,44 @@ public class TicketService {
         this.categoryRepository = categoryRepository;
     }
 
-    public Ticket createTicket(Ticket ticket) {
+    public TicketDTO createTicket(TicketCreateDTO dto) {
 
-        User user = userRepository.findById(ticket.getUser().getId())
+        User user = userRepository.findById(dto.getUserId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Usuário não encontrado!"));
 
-        Category category = categoryRepository.findById(ticket.getCategory().getId())
+        Category category = categoryRepository.findById(dto.getCategoryId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Categoria não encontrada!"));
 
+        Ticket ticket = new Ticket();
+
+        ticket.setTitle(dto.getTitle());
+        ticket.setDescription(dto.getDescription());
+        ticket.setStatus(dto.getStatus());
+        ticket.setPriority(dto.getPriority());
         ticket.setUser(user);
         ticket.setCategory(category);
 
-        return ticketRepository.save(ticket);
+        Ticket savedTicket = ticketRepository.save(ticket);
+
+        return TicketMapper.toDTO(savedTicket);
+
     }
 
-    public List<Ticket> getAllTickets() {
-        return ticketRepository.findAll();
+    public Page<TicketDTO> getAllTickets(Pageable pageable) {
+
+        Page<Ticket> tickets = ticketRepository.findAll(pageable);
+
+        return tickets.map(TicketMapper::toDTO);
+
     }
 
-    public Ticket getTicketById(Long id){
-        return ticketRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ticket não Encontrado!") );
+    public TicketDTO getTicketById(Long id){
+
+        Ticket ticket = ticketRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Ticket não Encontrado!") );
+
+        return TicketMapper.toDTO(ticket);
     }
 
     public Ticket updateTicket(Long id, Ticket ticketData) {

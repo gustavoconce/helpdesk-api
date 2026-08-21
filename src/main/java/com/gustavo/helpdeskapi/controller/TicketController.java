@@ -1,11 +1,16 @@
 package com.gustavo.helpdeskapi.controller;
 
+import com.gustavo.helpdeskapi.dto.TicketCreateDTO;
+import com.gustavo.helpdeskapi.dto.TicketDTO;
 import com.gustavo.helpdeskapi.entity.Ticket;
 import com.gustavo.helpdeskapi.service.TicketService;
 import jakarta.persistence.PostUpdate;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -21,17 +26,17 @@ public class TicketController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Ticket createTicket(@Valid @RequestBody Ticket ticket){
-        return ticketService.createTicket(ticket);
+    public TicketDTO createTicket(@Valid @RequestBody TicketCreateDTO dto) {
+        return ticketService.createTicket(dto);
     }
 
     @GetMapping
-    public List<Ticket> getAllTickets(){
-        return ticketService.getAllTickets();
+    public Page<TicketDTO> getAllTickets(Pageable pageable) {
+        return ticketService.getAllTickets(pageable);
     }
 
     @GetMapping("/{id}")
-    public Ticket getTicketById(@PathVariable Long id){
+    public TicketDTO getTicketById(@PathVariable Long id){
         return ticketService.getTicketById(id);
     }
 

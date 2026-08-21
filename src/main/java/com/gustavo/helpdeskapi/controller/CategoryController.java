@@ -1,5 +1,7 @@
 package com.gustavo.helpdeskapi.controller;
 
+import com.gustavo.helpdeskapi.dto.CategoryCreateDTO;
+import com.gustavo.helpdeskapi.dto.CategoryDTO;
 import com.gustavo.helpdeskapi.entity.Category;
 import com.gustavo.helpdeskapi.service.CategoryService;
 import jakarta.validation.Valid;
@@ -20,12 +22,12 @@ public class CategoryController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Category createCategory(@Valid @RequestBody Category category){
-        return categoryService.createCategory(category);
+    public CategoryDTO createCategory(@Valid @RequestBody CategoryCreateDTO dto) {
+        return categoryService.createCategory(dto);
     }
 
     @GetMapping
-    public List<Category> getAllCategories(){
+    public List<CategoryDTO> getAllCategories(){
         return categoryService.getAllCategories();
     }
 }
