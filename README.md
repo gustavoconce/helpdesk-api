@@ -1,22 +1,10 @@
 # HelpDesk API
 
-REST API for managing users, categories, and support tickets, developed with Java and Spring Boot.
+REST API para gerenciamento de usuários, categorias e chamados de suporte, desenvolvida com Java e Spring Boot.
 
-This project was created as a practical backend application to apply concepts such as REST APIs, object-oriented programming, Spring Boot, JPA, DTOs, exception handling, pagination, API documentation, and automated testing.
+O projeto foi desenvolvido como uma aplicação prática de backend, aplicando conceitos como arquitetura em camadas, APIs REST, JPA/Hibernate, DTOs, validação de dados, tratamento de exceções, paginação, documentação de APIs e testes automatizados.
 
-## 🚀 Project Overview
-
-The HelpDesk API provides a backend structure for managing a technical support environment.
-
-The API allows the management of:
-
-- Users
-- Categories
-- Support tickets
-
-The project was developed incrementally, with each version introducing new backend concepts and improvements.
-
-## 🛠️ Technologies
+## Tecnologias
 
 - Java 21
 - Spring Boot 4.1.0
@@ -31,11 +19,11 @@ The project was developed incrementally, with each version introducing new backe
 - Springdoc OpenAPI
 - Swagger UI
 
-## 🏗️ Architecture
+## Arquitetura
 
-The project follows a layered architecture:
+A aplicação utiliza uma arquitetura em camadas, separando as responsabilidades de cada parte do sistema:
 
-```text
+\`\`\`text
 Controller
     ↓
 DTO
@@ -47,23 +35,23 @@ Repository
 Entity
     ↓
 Database
-```
+\`\`\`
 
-For API responses, entities are converted into DTOs through dedicated mappers:
+A conversão entre entidades e objetos utilizados pela API é realizada através de mappers:
 
-```text
+\`\`\`text
 Entity
    ↓
 Mapper
    ↓
 DTO
    ↓
-JSON Response
-```
+JSON
+\`\`\`
 
-The main packages are organized as follows:
+Estrutura principal do projeto:
 
-```text
+\`\`\`text
 src/main/java/com/gustavo/helpdeskapi
 
 ├── config
@@ -74,50 +62,54 @@ src/main/java/com/gustavo/helpdeskapi
 ├── mapper
 ├── repository
 └── service
-```
+\`\`\`
 
-## 📌 Main Features
+## Funcionalidades
 
-### Users
+### Usuários
 
-The API supports:
+A API permite:
 
-- Creating users
-- Listing users
-- Finding users by ID
-- Updating users
-- Deleting users
+- Criar usuários
+- Listar usuários
+- Buscar usuário por ID
+- Atualizar usuários
+- Excluir usuários
 
-User responses are handled through DTOs to prevent sensitive information, such as passwords, from being exposed by the API.
+Os dados enviados e retornados pela API são controlados através de DTOs. Dessa forma, informações sensíveis presentes na entidade, como senha, não são expostas diretamente nas respostas.
 
-### Categories
+### Categorias
 
-The API currently supports:
+A API permite:
 
-- Creating categories
-- Listing categories
+- Criar categorias
+- Listar categorias
 
-### Tickets
+As categorias podem ser utilizadas na criação e organização dos chamados.
 
-The API supports:
+### Chamados
 
-- Creating tickets
-- Listing tickets
-- Finding tickets by ID
-- Updating tickets
-- Deleting tickets
-- Associating tickets with users
-- Associating tickets with categories
-- Defining ticket status
-- Defining ticket priority
+A API permite:
 
-## 📦 DTOs
+- Criar chamados
+- Listar chamados
+- Buscar chamado por ID
+- Atualizar chamados
+- Excluir chamados
+- Associar um chamado a um usuário
+- Associar um chamado a uma categoria
+- Definir o status do chamado
+- Definir a prioridade do chamado
 
-The project uses Data Transfer Objects to control the data exchanged through the API.
+Os chamados possuem relacionamento com usuários e categorias através do JPA.
 
-Examples include:
+## DTOs
 
-```text
+A aplicação utiliza Data Transfer Objects para controlar os dados recebidos e enviados pela API.
+
+Principais DTOs:
+
+\`\`\`text
 UserDTO
 UserCreateDTO
 
@@ -128,46 +120,38 @@ TicketDTO
 TicketCreateDTO
 
 ErrorResponseDTO
-```
+\`\`\`
 
-Using DTOs helps separate the API contract from the persistence entities and prevents sensitive entity fields from being unnecessarily exposed.
+Os DTOs permitem separar o contrato da API das entidades utilizadas para persistência no banco de dados, além de evitar a exposição desnecessária de informações internas das entidades.
 
-## 🔄 Mappers
+## Mappers
 
-Dedicated mapper classes are responsible for converting between DTOs and entities.
+A conversão entre entidades e DTOs é centralizada em classes específicas:
 
-Examples:
-
-```text
+\`\`\`text
 UserMapper
 CategoryMapper
 TicketMapper
-```
+\`\`\`
 
-This keeps conversion logic outside Controllers and Services.
+Com isso, Controllers e Services permanecem focados em suas respectivas responsabilidades, sem acumular lógica de conversão de objetos.
 
-## ✅ Validation
+## Validação
 
-The API uses Jakarta Bean Validation to validate incoming data.
+Os dados recebidos pela API são validados utilizando Jakarta Bean Validation.
 
-Examples include:
+Entre as validações utilizadas estão:
 
-```java
+\`\`\`java
 @NotBlank
 @NotNull
-```
+\`\`\`
 
-Controllers use:
+Os Controllers utilizam `@Valid` para executar as validações antes que os dados sejam processados pelo Service.
 
-```java
-@Valid
-```
+O fluxo de uma requisição é:
 
-to trigger validation before the request reaches the service layer.
-
-Example validation flow:
-
-```text
+\`\`\`text
 HTTP Request
      ↓
 CreateDTO
@@ -177,25 +161,25 @@ CreateDTO
 Validation
      ↓
 Service
-```
+\`\`\`
 
-Invalid requests return an HTTP `400 Bad Request`.
+Quando os dados enviados são inválidos, a API retorna `400 Bad Request` com informações sobre os campos que apresentaram erro.
 
-## ⚠️ Exception Handling
+## Tratamento de exceções
 
-The project implements centralized exception handling using:
+O projeto possui tratamento centralizado de exceções através de:
 
-```text
+\`\`\`text
 ResourceNotFoundException
 GlobalExceptionHandler
 ErrorResponseDTO
-```
+\`\`\`
 
-This prevents exception-handling logic from being duplicated across Controllers.
+Quando um recurso não é encontrado, uma `ResourceNotFoundException` é lançada pelo Service e tratada pelo `GlobalExceptionHandler`.
 
-Example:
+Exemplo de fluxo:
 
-```text
+\`\`\`text
 ResourceNotFoundException
           ↓
 GlobalExceptionHandler
@@ -203,13 +187,13 @@ GlobalExceptionHandler
 HTTP 404
           ↓
 ErrorResponseDTO
-```
+\`\`\`
 
-Validation errors are also handled centrally and return structured responses.
+Os erros de validação também são tratados de forma centralizada.
 
-Example:
+Exemplo de resposta:
 
-```json
+\`\`\`json
 {
   "status": 400,
   "message": "Erro de validação",
@@ -218,29 +202,28 @@ Example:
     "name": "Nome é obrigatório"
   }
 }
-```
+\`\`\`
 
-## 📄 Pagination and Sorting
+## Paginação e ordenação
 
-Ticket listing supports pagination and sorting through Spring Data's `Pageable`.
+A listagem de chamados utiliza `Pageable`, permitindo controlar a quantidade de registros retornados e a ordenação dos resultados.
 
-Example:
+Exemplo:
 
-```http
+\`\`\`http
 GET /api/tickets?page=0&size=10&sort=id,desc
-```
+\`\`\`
 
-The API returns pagination metadata such as:
+A resposta contém informações de paginação, como:
 
-- Current page
-- Page size
-- Total elements
-- Total pages
-- Sorting information
+- Página atual
+- Quantidade de registros por página
+- Total de registros
+- Total de páginas
 
-Example response structure:
+Exemplo:
 
-```json
+\`\`\`json
 {
   "content": [],
   "number": 0,
@@ -248,84 +231,25 @@ Example response structure:
   "totalElements": 10,
   "totalPages": 1
 }
-```
+\`\`\`
 
-## 📚 API Documentation
+## Banco de dados
 
-The API is documented using OpenAPI and Swagger UI.
+A aplicação utiliza PostgreSQL como banco de dados relacional.
 
-After starting the application, the documentation is available at:
+O acesso e o mapeamento dos dados são realizados utilizando Spring Data JPA e Hibernate.
 
-```text
-http://localhost:8080/swagger-ui/index.html
-```
+As principais entidades são:
 
-The OpenAPI specification is available at:
-
-```text
-http://localhost:8080/v3/api-docs
-```
-
-The API documentation is configured with:
-
-```text
-Name: HelpDesk API
-Version: 2.0.0
-```
-
-## 🧪 Automated Tests
-
-The project includes automated tests using JUnit 5 and Mockito.
-
-The tests focus mainly on the service layer and use mocks to isolate business logic from the database.
-
-Current test structure:
-
-```text
-UserServiceTest
-├── shouldFindUserById
-├── shouldThrowExceptionWhenUserDoesNotExist
-└── shouldCreateUser
-
-TicketServiceTest
-├── shouldCreateTicket
-├── shouldThrowExceptionWhenUserDoesNotExist
-├── shouldThrowExceptionWhenCategoryDoesNotExist
-├── shouldFindTicketById
-├── shouldThrowExceptionWhenTicketDoesNotExist
-├── shouldUpdateTicket
-└── shouldDeleteTicket
-
-CategoryServiceTest
-├── shouldCreateCategory
-└── shouldFindAllCategories
-```
-
-The project currently contains:
-
-```text
-13 automated tests
-```
-
-The tests cover successful operations, missing resources, repository interactions, and exception scenarios.
-
-## 🗄️ Database
-
-The application uses PostgreSQL as its relational database.
-
-JPA and Hibernate are used to map Java entities to database tables.
-
-Main entities include:
-
-```text
+\`\`\`text
 User
 Category
 Ticket
-```
+\`\`\`
 
-Relationships include:
+Os relacionamentos principais são:
 
-```text
+\`\`\`text
 User
   │
   └── Ticket
@@ -333,174 +257,172 @@ User
 Category
   │
   └── Ticket
-```
+\`\`\`
 
-## 🔌 API Endpoints
+Um usuário pode possuir vários chamados, enquanto cada chamado está associado a um usuário e a uma categoria.
+
+## Endpoints
 
 ### Users
 
-```http
+\`\`\`http
 POST   /api/users
 GET    /api/users
 GET    /api/users/{id}
 PUT    /api/users/{id}
 DELETE /api/users/{id}
-```
+\`\`\`
 
 ### Categories
 
-```http
+\`\`\`http
 POST /api/categories
 GET  /api/categories
-```
+\`\`\`
 
 ### Tickets
 
-```http
+\`\`\`http
 POST   /api/tickets
 GET    /api/tickets
 GET    /api/tickets/{id}
 PUT    /api/tickets/{id}
 DELETE /api/tickets/{id}
-```
+\`\`\`
 
-## ▶️ Running the Project
+## Documentação da API
 
-### Prerequisites
+A API utiliza OpenAPI e Swagger UI para documentação e teste dos endpoints.
 
-Make sure you have:
+Após iniciar a aplicação, a documentação pode ser acessada em:
+
+\`\`\`text
+http://localhost:8080/swagger-ui/index.html
+\`\`\`
+
+A especificação OpenAPI está disponível em:
+
+\`\`\`text
+http://localhost:8080/v3/api-docs
+\`\`\`
+
+## Testes
+
+O projeto possui testes automatizados utilizando JUnit 5 e Mockito.
+
+Os testes estão concentrados principalmente na camada de Service, utilizando mocks para isolar as regras de negócio do banco de dados.
+
+Principais cenários testados:
+
+\`\`\`text
+UserServiceTest
+├── Criação de usuário
+├── Busca de usuário
+└── Usuário inexistente
+
+TicketServiceTest
+├── Criação de chamado
+├── Busca de chamado
+├── Atualização de chamado
+├── Exclusão de chamado
+├── Usuário inexistente
+├── Categoria inexistente
+└── Chamado inexistente
+
+CategoryServiceTest
+├── Criação de categoria
+└── Listagem de categorias
+\`\`\`
+
+O projeto possui atualmente **13 testes automatizados**, cobrindo operações de sucesso, recursos inexistentes, interações com repositories e cenários de exceção.
+
+## Como executar
+
+### Pré-requisitos
 
 - Java 21
 - PostgreSQL
-- IntelliJ IDEA or another Java IDE
+- IDE de sua preferência
 
-The project includes the Maven Wrapper, so Maven does not need to be installed globally.
+O projeto possui Maven Wrapper, portanto não é necessário instalar o Maven globalmente.
 
-### 1. Clone the repository
+### 1. Clone o repositório
 
-```bash
+\`\`\`bash
 git clone https://github.com/gustavoconce/helpdesk-api.git
-```
+\`\`\`
 
-### 2. Configure the database
+### 2. Configure o banco de dados
 
-Create a PostgreSQL database for the application.
+Crie um banco PostgreSQL para a aplicação e configure as credenciais em:
 
-Then configure the database connection in:
-
-```text
+\`\`\`text
 src/main/resources/application.properties
-```
+\`\`\`
 
-Example:
+Exemplo:
 
-```properties
+\`\`\`properties
 spring.datasource.url=jdbc:postgresql://localhost:5432/helpdesk
 spring.datasource.username=postgres
 spring.datasource.password=your_password
-```
+\`\`\`
 
-### 3. Run the application
+### 3. Execute a aplicação
 
-Using the Maven Wrapper on Windows:
+No Windows:
 
-```powershell
+\`\`\`powershell
 .\mvnw.cmd spring-boot:run
-```
+\`\`\`
 
-Or run the main Spring Boot class directly through your IDE.
+Também é possível executar a classe principal da aplicação diretamente pela IDE.
 
-### 4. Access the API
+### 4. Acesse a API
 
-The API will be available at:
+A aplicação estará disponível em:
 
-```text
+\`\`\`text
 http://localhost:8080
-```
+\`\`\`
 
-Swagger UI:
+A documentação pode ser acessada pelo Swagger:
 
-```text
+\`\`\`text
 http://localhost:8080/swagger-ui/index.html
-```
+\`\`\`
 
-## 🧪 Running Tests
+## Executando os testes
 
-To run the complete test suite using the Maven Wrapper on Windows:
+Para executar todos os testes:
 
-```powershell
+\`\`\`powershell
 .\mvnw.cmd test
-```
+\`\`\`
 
-The project currently contains 13 automated tests.
+## Objetivo do projeto
 
-## 📈 Project Versions
+O objetivo do HelpDesk API é demonstrar conhecimentos práticos de desenvolvimento backend utilizando Java e Spring Boot.
 
-### V1.0
+O projeto reúne conceitos utilizados no desenvolvimento de aplicações reais, como:
 
-Initial implementation of the HelpDesk API, including:
+- Desenvolvimento de APIs REST
+- Programação orientada a objetos
+- Arquitetura em camadas
+- Persistência de dados
+- Spring Data JPA
+- DTOs
+- Mappers
+- Validação de dados
+- Tratamento de exceções
+- Paginação e ordenação
+- Documentação de APIs
+- Testes automatizados
 
-- User management
-- Category management
-- Ticket management
-- REST endpoints
-- PostgreSQL integration
-- JPA/Hibernate
-- Basic exception handling
+## Autor
 
-### V2.0
+Desenvolvido por **Gustavo Conceição**.
 
-The second version focused on improving the API architecture, validation, documentation, and reliability.
+Graduado em Sistemas de Informação pela FIAP, com foco em desenvolvimento backend, APIs e engenharia de software.
 
-Implemented:
-
-- DTOs and CreateDTOs
-- Entity/DTO mappers
-- Request validation
-- Centralized exception handling
-- Structured error responses
-- Pagination
-- Sorting
-- OpenAPI documentation
-- Swagger UI
-- Automated unit tests with JUnit 5 and Mockito
-
-## 🎯 Project Goals
-
-The main goal of this project is to demonstrate practical backend development skills using Java and Spring Boot.
-
-The project focuses on concepts commonly used in real-world backend applications, including:
-
-- REST API development
-- Layered architecture
-- Object-oriented programming
-- Data persistence
-- DTO pattern
-- Mapper pattern
-- Input validation
-- Exception handling
-- Pagination
-- API documentation
-- Automated testing
-- Clean and maintainable code
-
-## 🔮 Future Improvements
-
-Possible improvements for future versions include:
-
-- Authentication and authorization with Spring Security
-- Password hashing
-- Role-based access control
-- More complete CRUD operations for categories
-- Dedicated UpdateDTOs
-- Integration tests
-- Improved API error standardization
-- Docker support
-- CI/CD pipeline
-- Production environment configuration
-
-## 👨‍💻 Author
-
-Developed by Gustavo Conceição.
-
-Bachelor's degree in Information Systems with a focus on backend development, APIs, software engineering, and data-driven solutions.
+GitHub: https://github.com/gustavoconce/helpdesk-api
